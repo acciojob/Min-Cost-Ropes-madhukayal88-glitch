@@ -1,63 +1,36 @@
 function mincost(arr) {
-    if (!arr || arr.length <= 1) return 0;
-
-    // Use a Min-Heap to always extract the two smallest elements efficiently
-    const minHeap = new MinHeap();
-    for (let length of arr) {
-        minHeap.insert(length);
-    }
+    if (arr.length <= 1) return 0;
 
     let totalCost = 0;
 
-    // Process until only one rope remains
-    while (minHeap.size() > 1) {
-        let first = minHeap.extractMin();
-        let second = minHeap.extractMin();
+    // Sort initially: O(N log N)
+    arr.sort((a, b) => a - b);
 
-        let cost = first + second;
-        totalCost += cost;
+    while (arr.length > 1) {
+        // 1. Take the two smallest (they are at the start)
+        let first = arr.shift();
+        let second = arr.shift();
 
-        // Push the combined rope back into the heap
-        minHeap.insert(cost);
+        let currentCost = first + second;
+        totalCost += currentCost;
+
+        // 2. Instead of sorting the whole array again, 
+        // find the correct spot for currentCost to keep the array sorted.
+        // This makes the insertion O(N) instead of O(N log N).
+        let inserted = false;
+        for (let i = 0; i < arr.length; i++) {
+            if (currentCost < arr[i]) {
+                arr.splice(i, 0, currentCost);
+                inserted = true;
+                break;
+            }
+        }
+        
+        // If it's larger than all existing ropes, put it at the end
+        if (!inserted) {
+            arr.push(currentCost);
+        }
     }
 
     return totalCost;
-}
-
-// Minimalist Min-Heap implementation for competitive coding
-class MinHeap {
-    constructor() {
-        this.heap = [];
-    }
-    size() { return this.heap.length; }
-    insert(val) {
-        this.heap.push(val);
-        this.bubbleUp();
-    }
-    bubbleUp() {
-        let index = this.heap.length - 1;
-        while (index > 0) {
-            let parent = Math.floor((index - 1) / 2);
-            if (this.heap[parent] <= this.heap[index]) break;
-            [this.heap[parent], this.heap[index]] = [this.heap[index], this.heap[parent]];
-            index = parent;
-        }
-    }
-    extractMin() {
-        if (this.size() === 1) return this.heap.pop();
-        const min = this.heap[0];
-        this.heap[0] = this.heap.pop();
-        this.sinkDown(0);
-        return min;
-    }
-    sinkDown(index) {
-        while (true) {
-            let left = 2 * index + 1, right = 2 * index + 2, smallest = index;
-            if (left < this.size() && this.heap[left] < this.heap[smallest]) smallest = left;
-            if (right < this.size() && this.heap[right] < this.heap[smallest]) smallest = right;
-            if (smallest === index) break;
-            [this.heap[index], this.heap[smallest]] = [this.heap[smallest], this.heap[index]];
-            index = smallest;
-        }
-    }
 }
