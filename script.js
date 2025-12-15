@@ -1,20 +1,33 @@
-function mincost(arr) {
-    if (arr.length <= 1) return 0;
+function minCost(arr) {
+    let totalCost = 0;
 
-    // Min heap using sort
-    let heap = [...arr].sort((a, b) => a - b);
-    let cost = 0;
+    // Continue until only one rope remains
+    while (arr.length > 1) {
 
-    while (heap.length > 1) {
-        let first = heap.shift();
-        let second = heap.shift();
+        // Sort ropes to get the two smallest lengths
+        arr.sort((a, b) => a - b);
 
-        let sum = first + second;
-        cost += sum;
+        // Pick the two smallest ropes
+        let first = arr[0];
+        let second = arr[1];
 
-        heap.push(sum);
-        heap.sort((a, b) => a - b);
+        // Remove the two ropes from the array
+        arr.splice(0, 2);
+
+        // Cost of connecting these two ropes
+        let cost = first + second;
+        totalCost += cost;
+
+        // Push the new rope back into the array
+        arr.push(cost);
     }
 
-    return cost;
+    return totalCost;
 }
+
+function main() {
+    let ropes = [4, 3, 2, 6];
+    console.log(minCost(ropes));
+}
+
+main();
