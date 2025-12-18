@@ -2,7 +2,7 @@ function mincost(arr) {
     if (arr.length <= 1) return 0;
 
     let ropes = [...arr];
-    let totalCost = 0;
+    let cost = 0;
 
     ropes.sort((a, b) => a - b);
 
@@ -11,7 +11,7 @@ function mincost(arr) {
         let b = ropes.shift();
 
         let sum = a + b;
-        totalCost += sum;
+        cost += sum;
 
         let i = 0;
         while (i < ropes.length && ropes[i] < sum) {
@@ -20,5 +20,5 @@ function mincost(arr) {
         ropes.splice(i, 0, sum);
     }
 
-    return totalCost;
+    return cost;
 }
