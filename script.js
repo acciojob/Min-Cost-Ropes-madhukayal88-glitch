@@ -1,33 +1,31 @@
-function minCost(arr) {
+function mincost(arr) {
+    if (arr.length <= 1) return 0;
+
+    // Use a min-heap or sort the array initially
+    // For smaller constraints (N=1000), we can re-sort or use a priority queue
     let totalCost = 0;
+    
+    // Convert array into a sorted list (acting as a min-heap)
+    arr.sort((a, b) => a - b);
 
-    // Continue until only one rope remains
     while (arr.length > 1) {
+        // Take the two smallest ropes
+        let first = arr.shift();
+        let second = arr.shift();
 
-        // Sort ropes to get the two smallest lengths
-        arr.sort((a, b) => a - b);
+        // Calculate the cost to connect them
+        let currentCost = first + second;
+        totalCost += currentCost;
 
-        // Pick the two smallest ropes
-        let first = arr[0];
-        let second = arr[1];
-
-        // Remove the two ropes from the array
-        arr.splice(0, 2);
-
-        // Cost of connecting these two ropes
-        let cost = first + second;
-        totalCost += cost;
-
-        // Push the new rope back into the array
-        arr.push(cost);
+        // Insert the new rope back into the sorted array
+        // Finding the correct index keeps the array sorted (O(N) insertion)
+        let index = arr.findIndex(val => val > currentCost);
+        if (index === -1) {
+            arr.push(currentCost);
+        } else {
+            arr.splice(index, 0, currentCost);
+        }
     }
 
     return totalCost;
 }
-
-function main() {
-    let ropes = [4, 3, 2, 6];
-    console.log(minCost(ropes));
-}
-
-main();
