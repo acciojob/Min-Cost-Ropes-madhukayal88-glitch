@@ -1,19 +1,23 @@
 function mincost(arr) {
-    if (arr.length <= 1) return 0;
+    if (arr.length <= 1) {
+        return 0;
+    }
 
-    let ropes = [...arr];   // input mutate aagakoodadhu
-    let cost = 0;
+    var ropes = arr.slice(); // copy array
+    var cost = 0;
 
-    ropes.sort((a, b) => a - b);  // sort knowledge use pannrom
+    ropes.sort(function(a, b) {
+        return a - b;
+    });
 
     while (ropes.length > 1) {
-        let x = ropes.shift();
-        let y = ropes.shift();
+        var x = ropes.shift();
+        var y = ropes.shift();
 
-        let sum = x + y;
+        var sum = x + y;
         cost += sum;
 
-        let i = 0;
+        var i = 0;
         while (i < ropes.length && ropes[i] < sum) {
             i++;
         }
