@@ -1,16 +1,33 @@
-<!DOCTYPE html>
+<script>
+  function mincost(arr) {
+    // Edge case: if array has 0 or 1 rope, cost is 0
+    if (!Array.isArray(arr) || arr.length <= 1) return 0;
 
-<html>
+    let totalCost = 0;
+    let heap = [...arr];
 
-<head>
-	<link rel="stylesheet" href="styles.css">
-</head>
+    // While more than one rope remains
+    while (heap.length > 1) {
+      // Sort ascending to get two smallest ropes
+      heap.sort((a, b) => a - b);
 
-<body>
-	<!-- the entire body must be written by student -->
-    <script type="text/javascript" src="./script.js">
+      // Take out two smallest
+      let first = heap.shift();
+      let second = heap.shift();
+
+      // Cost to connect them
+      let cost = first + second;
+      totalCost += cost;
+
+      // Push the new rope back
+      heap.push(cost);
+    }
+
+    return totalCost;
+  }
+
+  // --- Examples for quick testing ---
+  console.log(mincost([4, 3, 2, 6]));   // 29
+  console.log(mincost([1, 2, 3, 4, 5])); // 33
+  console.log(mincost([10]));            // 0
 </script>
-
-</body>
-
-</html>
