@@ -1,36 +1,37 @@
-function mincost(arr) {
-    if (arr.length <= 1) return 0;
+// Function name must match exactly what index.js is calling
+function minCost(arr) {
+  if (!arr || arr.length <= 1) return 0;
 
-    let totalCost = 0;
+  // Use a greedy approach: always combine the two smallest ropes
+  // For N=1000, we can sort in each step or use a priority queue logic
+  let totalCost = 0;
 
-    // Sort the initial array
-    arr.sort((a, b) => a - b);
+  // Sort initially
+  arr.sort((a, b) => a - b);
 
-    while (arr.length > 1) {
-        // 1. Take the two smallest ropes
-        let first = arr.shift();
-        let second = arr.shift();
+  while (arr.length > 1) {
+    // Take the two smallest
+    let first = arr.shift();
+    let second = arr.shift();
 
-        // 2. Connect them and add to total cost
-        let cost = first + second;
-        totalCost += cost;
+    let currentSum = first + second;
+    totalCost += currentSum;
 
-        // 3. Insert the new rope back and keep the array sorted
-        // For N=1000, we can find the correct index to keep it efficient
-        let inserted = false;
-        for (let i = 0; i < arr.length; i++) {
-            if (cost < arr[i]) {
-                arr.splice(i, 0, cost);
-                inserted = true;
-                break;
-            }
-        }
-        if (!inserted) arr.push(cost);
+    // Insert the sum back into the array while maintaining sort order
+    // This is more efficient than calling .sort() every time
+    let inserted = false;
+    for (let i = 0; i < arr.length; i++) {
+      if (currentSum < arr[i]) {
+        arr.splice(i, 0, currentSum);
+        inserted = true;
+        break;
+      }
     }
+    if (!inserted) arr.push(currentSum);
+  }
 
-    return totalCost;
+  return totalCost;
 }
 
-// Testing the examples
-console.log(mincost([4, 3, 2, 6]));    // Output: 29
-console.log(mincost([1, 2, 3, 4, 5])); // Output: 33
+// Ensure you export it if it's in a separate file
+module.exports = minCost;
